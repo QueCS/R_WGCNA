@@ -69,11 +69,18 @@ numericLabels = TRUE, pamRespectsDendro = FALSE)
 # See how many modules where identified
 table(net$colors)
 
+# Store valuable data from the TOM
+moduleLabels = net$colors
+geneTree = net$dendrograms
+MEs = net$MEs
+# Convert labels to colors for plotting
+moduleColors = labels2colors(moduleLabels)
+
 # Plot the dendrogram and the module colors underneath
-plotDendroAndColors(geneTree, moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
+plotDendroAndColors(geneTree[[1]], moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
 # Export the same plot in .png
 png("WT_Star_Wico_def_minModuleSize30_Gene Cluster Dendrogram.png", width = 800, height = 600, units = "px")
-plotDendroAndColors(geneTree, moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
+plotDendroAndColors(geneTree[[1]], moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
 dev.off()
 
 # Plot the eigengene dendrogram
@@ -266,13 +273,6 @@ plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,
 par(mar=c(5, 4.7, 0.2, 1.1))
 barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
 
-which.module="25"
-ME=datME[, paste("ME",which.module, sep="")]
-par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
-plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
-par(mar=c(5, 4.7, 0.2, 1.1))
-barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
-
 # Store and export the Eigengenes expression levels per Modules
 tMEs = t(MEs)
 MEsExport = as.data.frame(tMEs)
@@ -287,7 +287,7 @@ write.xlsx2(moduleLabelsExport, row.names = FALSE, "WT_Star_Wico_def_minModuleSi
 # Merge Annotation & Module membership
 mergedAnnotations <- read_excel("mergedAnnotations.xlsx")
 completeData = merge(moduleLabelsExport, mergedAnnotations, by = "PeaxiGene")
-write.xlsx2(completeData, , row.names = FALSE, "WT_Star_Wico_def_minModuleSize30_Final output.xlsx")
+write.xlsx2(completeData, row.names = FALSE, "WT_Star_Wico_def_minModuleSize30_Final output.xlsx")
 
 # Store an .RData image of the working space
 save.image(file = "WT_Star_Wico_def_minModuleSize30.RData")
