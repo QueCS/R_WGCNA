@@ -30,7 +30,7 @@ cleanData = transposedRawData[gsg$goodSamples, gsg$goodGenes]
 # Plot and export (.png) a Cluster Dendrogram showing obvious sample outliers
 sampleTree = hclust(dist(cleanData), method = "average")
 plot(sampleTree)
-png("WT_Star_Wico_def_minModuleSize30_Sample Cluster Dendrogram.png", width = 800, height = 600, units = "px")
+png("WT_Star_Wico_def_minModuleSize1_Sample Cluster Dendrogram.png", width = 800, height = 600, units = "px")
 plot(sampleTree)
 dev.off()
 
@@ -46,7 +46,7 @@ ylab="Mean Connectivity", type="n",
 main = paste("Mean connectivity"))
 text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1,col="red")
 # Export the same plot in .png
-png("WT_Star_Wico_def_minModuleSize30_Mean Connectivity.png", width = 800, height = 600, units = "px")
+png("WT_Star_Wico_def_minModuleSize1_Mean Connectivity.png", width = 800, height = 600, units = "px")
 plot(sft$fitIndices[,1], sft$fitIndices[,5], xlab="Soft Thresholding Power",
 ylab="Mean Connectivity", type="n",
 main = paste("Mean connectivity"))
@@ -69,11 +69,18 @@ numericLabels = TRUE, pamRespectsDendro = FALSE)
 # See how many modules where identified
 table(net$colors)
 
+# Store valuable data from the TOM
+moduleLabels = net$colors
+geneTree = net$dendrograms
+MEs = net$MEs
+# Convert labels to colors for plotting
+moduleColors = labels2colors(moduleLabels)
+
 # Plot the dendrogram and the module colors underneath
-plotDendroAndColors(geneTree, moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
+plotDendroAndColors(geneTree[[1]], moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
 # Export the same plot in .png
-png("WT_Star_Wico_def_minModuleSize30_Gene Cluster Dendrogram.png", width = 800, height = 600, units = "px")
-plotDendroAndColors(geneTree, moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
+png("WT_Star_Wico_def_minModuleSize1_Gene Cluster Dendrogram.png", width = 800, height = 600, units = "px")
+plotDendroAndColors(geneTree[[1]], moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
 dev.off()
 
 # Plot the eigengene dendrogram
@@ -84,13 +91,13 @@ hclustdatME=hclust(as.dist(dissimME), method="average" )
 par(mfrow=c(1,1))
 plot(hclustdatME, main="Clustering Tree based on the module eigengene")
 # Export the same plot in .png
-png("WT_Star_Wico_def_minModuleSize30_Clustering Tree of the Module Eigengene.png", width = 800, height = 600, units = "px")
+png("WT_Star_Wico_def_minModuleSize1_Clustering Tree of the Module Eigengene.png", width = 800, height = 600, units = "px")
 plot(hclustdatME, main="Clustering Tree based on the module eigengenes")
 dev.off()
 
 # Plot for each module the gene expression levels and the eigengen expression levels in the different samples (red > green)
 # Store the plots in a .pdf file
-pdf("WT_Star_Wico_def_minModuleSize30_Gene and Eigengene expression level.pdf")
+pdf("WT_Star_Wico_def_minModuleSize1_Gene and Eigengene expression level.pdf")
 which.module="0"
 ME=datME[, paste("ME",which.module, sep="")]
 par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
@@ -273,21 +280,393 @@ plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,
 par(mar=c(5, 4.7, 0.2, 1.1))
 barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
 
+which.module="26"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="27"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="28"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="29"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="30"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="31"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="32"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="33"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="34"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="35"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="36"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="37"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="38"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="39"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="40"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="41"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="42"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="43"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="44"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="45"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="46"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="47"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="48"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="49"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="50"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="51"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="52"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="53"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="54"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="55"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="56"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="57"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="58"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="59"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="60"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="61"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="62"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="63"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="64"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="65"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="66"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="67"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="68"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="69"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="70"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="71"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="72"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="73"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="74"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="75"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="76"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="77"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+
+which.module="78"
+ME=datME[, paste("ME",which.module, sep="")]
+par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
+plotMat(t(scale(cleanData[,moduleLabels==which.module])), nrgcols=100,rlabels=F,rcols=which.module, main=which.module, cex.main=2)
+par(mar=c(5, 4.7, 0.2, 1.1))
+barplot(ME, col=0, main="", cex.main=2, ylab="eigengene expr. lvl.",xlab="Samples")
+dev.off()
+
 # Store and export the Eigengenes expression levels per Modules
 tMEs = t(MEs)
 MEsExport = as.data.frame(tMEs)
-write.xlsx2(MEsExport, "WT_Star_Wico_def_minModuleSize30_Eigengene expression level.xlsx")
+write.xlsx2(MEsExport, "WT_Star_Wico_def_minModuleSize1_Eigengene expression level.xlsx")
 # Store and export the Modules Labels
 moduleLabelsExport = as.data.frame(moduleLabels)
 moduleLabelsExport = cbind(rownames(moduleLabelsExport), data.frame(moduleLabels, row.names = NULL))
 names(moduleLabelsExport)[1] = "PeaxiGene"
 names(moduleLabelsExport)[2] = "Module"
-write.xlsx2(moduleLabelsExport, row.names = FALSE, "WT_Star_Wico_def_minModuleSize30_Module membership.xlsx")
+write.xlsx2(moduleLabelsExport, row.names = FALSE, "WT_Star_Wico_def_minModuleSize1_Module membership.xlsx")
 
 # Merge Annotation & Module membership
 mergedAnnotations <- read_excel("mergedAnnotations.xlsx")
 completeData = merge(moduleLabelsExport, mergedAnnotations, by = "PeaxiGene")
-write.xlsx2(completeData, , row.names = FALSE, "WT_Star_Wico_def_minModuleSize30_Final output.xlsx")
+write.xlsx2(completeData, row.names = FALSE, "WT_Star_Wico_def_minModuleSize1_Final output.xlsx")
 
 # Store an .RData image of the working space
-save.image(file = "WT_Star_Wico_def_minModuleSize30.RData")
+save.image(file = "WT_Star_Wico_def_minModuleSize1.RData")
