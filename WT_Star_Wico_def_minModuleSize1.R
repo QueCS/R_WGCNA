@@ -3,7 +3,7 @@
 #       RNAseq DATA MUST BE IN THIS DIRECTORY     #
 ###################################################
 
-#Load mandatory libraries
+# Load mandatory libraries
 library(fastcluster)
 library(dynamicTreeCut)
 library(WGCNA)
@@ -88,7 +88,7 @@ png("WT_Star_Wico_def_minModuleSize1_Clustering Tree of the Module Eigengene.png
 plot(hclustdatME, main="Clustering Tree based on the module eigengenes")
 dev.off()
 
-# Plot the genes expression levels and the eigengen expression levels in the different samples (red > green) for each module
+# Plot for each module the gene expression levels and the eigengen expression levels in the different samples (red > green)
 # Store the plots in a .pdf file
 pdf("WT_Star_Wico_def_minModuleSize1_Gene and Eigengene expression level.pdf")
 which.module="0"
@@ -661,5 +661,5 @@ mergedAnnotations <- read_excel("mergedAnnotations.xlsx")
 completeData = merge(moduleLabelsExport, mergedAnnotations, by = "PeaxiGene")
 write.xlsx2(completeData, , row.names = FALSE, "WT_Star_Wico_def_minModuleSize1_Final output.xlsx")
 
-# Store a .RData image of the working space
+# Store an .RData image of the working space
 save.image(file = "WT_Star_Wico_def_minModuleSize1.RData")
