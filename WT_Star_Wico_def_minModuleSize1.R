@@ -11,7 +11,7 @@ library(xlsx)
 library(readxl)
 
 # The following setting is important, do not omit
-options(stringsAsFactors = FALSE)
+options(stringsAsFactors = TRUE)
 
 # Import RNASeq data
 rawData = read.table("all_star-wico_vs_Petunia_axillaris_v1.6.2_genomeHiCassembly.DESeq2_normalized_counts.txt", comment="", header=TRUE)
