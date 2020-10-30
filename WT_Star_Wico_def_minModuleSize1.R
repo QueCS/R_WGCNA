@@ -80,7 +80,7 @@ moduleColors = labels2colors(moduleLabels)
 plotDendroAndColors(geneTree[[1]], moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
 # Export the same plot in .png
 png("WT_Star_Wico_def_minModuleSize1_Gene Cluster Dendrogram.png", width = 800, height = 600, units = "px")
-plotDendroAndColors(geneTree, moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
+plotDendroAndColors(geneTree[[1]], moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
 dev.off()
 
 # Plot the eigengene dendrogram
