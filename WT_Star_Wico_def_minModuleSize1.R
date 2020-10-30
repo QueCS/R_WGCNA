@@ -8,6 +8,7 @@ library(fastcluster)
 library(dynamicTreeCut)
 library(WGCNA)
 library(xlsx)
+library(readxl)
 
 # The following setting is important, do not omit
 options(stringsAsFactors = FALSE)
@@ -647,7 +648,7 @@ dev.off()
 # Store and export the Eigengenes expression levels per Modules
 tMEs = t(MEs)
 MEsExport = as.data.frame(tMEs)
-write.xlsx(MEsExport, "WT_Star_Wico_def_minModuleSize1_Eigengene expression level.xlsx")
+write.xlsx2(MEsExport, "WT_Star_Wico_def_minModuleSize1_Eigengene expression level.xlsx")
 # Store and export the Modules Labels
 moduleLabelsExport = as.data.frame(moduleLabels)
 moduleLabelsExport = cbind(rownames(moduleLabelsExport), data.frame(moduleLabels, row.names = NULL))
@@ -656,6 +657,9 @@ names(moduleLabelsExport)[2] = "Module"
 write.xlsx2(moduleLabelsExport, row.names = FALSE, "WT_Star_Wico_def_minModuleSize1_Module membership.xlsx")
 
 # Merge Annotation & Module membership
+mergedAnnotations <- read_excel("mergedAnnotations.xlsx")
+completeData = merge(moduleLabelsExport, mergedAnnotations, by = "PeaxiGene")
+write.xlsx2(completeData, , row.names = FALSE, "WT_Star_Wico_def_minModuleSize1_Final output.xlsx")
 
 # Store a .RData image of the working space
 save.image(file = "WT_Star_Wico_def_minModuleSize1.RData")
