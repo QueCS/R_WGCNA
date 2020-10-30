@@ -30,7 +30,7 @@ cleanData = transposedRawData[gsg$goodSamples, gsg$goodGenes]
 # Plot and export (.png) a Cluster Dendrogram showing obvious sample outliers
 sampleTree = hclust(dist(cleanData), method = "average")
 plot(sampleTree)
-png("WT_Star_Wico_def_minModuleSize1_Sample Cluster Dendrogram.png", width = 800, height = 600, units = "px")
+png("WT_Star_Wico_def_minModuleSize30_Sample Cluster Dendrogram.png", width = 800, height = 600, units = "px")
 plot(sampleTree)
 dev.off()
 
@@ -46,7 +46,7 @@ ylab="Mean Connectivity", type="n",
 main = paste("Mean connectivity"))
 text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1,col="red")
 # Export the same plot in .png
-png("WT_Star_Wico_def_minModuleSize1_Mean Connectivity.png", width = 800, height = 600, units = "px")
+png("WT_Star_Wico_def_minModuleSize30_Mean Connectivity.png", width = 800, height = 600, units = "px")
 plot(sft$fitIndices[,1], sft$fitIndices[,5], xlab="Soft Thresholding Power",
 ylab="Mean Connectivity", type="n",
 main = paste("Mean connectivity"))
@@ -79,7 +79,7 @@ moduleColors = labels2colors(moduleLabels)
 # Plot the dendrogram and the module colors underneath
 plotDendroAndColors(geneTree[[1]], moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
 # Export the same plot in .png
-png("WT_Star_Wico_def_minModuleSize1_Gene Cluster Dendrogram.png", width = 800, height = 600, units = "px")
+png("WT_Star_Wico_def_minModuleSize30_Gene Cluster Dendrogram.png", width = 800, height = 600, units = "px")
 plotDendroAndColors(geneTree[[1]], moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
 dev.off()
 
@@ -91,13 +91,13 @@ hclustdatME=hclust(as.dist(dissimME), method="average" )
 par(mfrow=c(1,1))
 plot(hclustdatME, main="Clustering Tree based on the module eigengene")
 # Export the same plot in .png
-png("WT_Star_Wico_def_minModuleSize1_Clustering Tree of the Module Eigengene.png", width = 800, height = 600, units = "px")
+png("WT_Star_Wico_def_minModuleSize30_Clustering Tree of the Module Eigengene.png", width = 800, height = 600, units = "px")
 plot(hclustdatME, main="Clustering Tree based on the module eigengenes")
 dev.off()
 
 # Plot for each module the gene expression levels and the eigengen expression levels in the different samples (red > green)
 # Store the plots in a .pdf file
-pdf("WT_Star_Wico_def_minModuleSize1_Gene and Eigengene expression level.pdf")
+pdf("WT_Star_Wico_def_minModuleSize30_Gene and Eigengene expression level.pdf")
 which.module="0"
 ME=datME[, paste("ME",which.module, sep="")]
 par(mfrow=c(2,1), mar=c(0.3, 5.5, 3, 2))
@@ -655,18 +655,18 @@ dev.off()
 # Store and export the Eigengenes expression levels per Modules
 tMEs = t(MEs)
 MEsExport = as.data.frame(tMEs)
-write.xlsx2(MEsExport, "WT_Star_Wico_def_minModuleSize1_Eigengene expression level.xlsx")
+write.xlsx2(MEsExport, "WT_Star_Wico_def_minModuleSize30_Eigengene expression level.xlsx")
 # Store and export the Modules Labels
 moduleLabelsExport = as.data.frame(moduleLabels)
 moduleLabelsExport = cbind(rownames(moduleLabelsExport), data.frame(moduleLabels, row.names = NULL))
 names(moduleLabelsExport)[1] = "PeaxiGene"
 names(moduleLabelsExport)[2] = "Module"
-write.xlsx2(moduleLabelsExport, row.names = FALSE, "WT_Star_Wico_def_minModuleSize1_Module membership.xlsx")
+write.xlsx2(moduleLabelsExport, row.names = FALSE, "WT_Star_Wico_def_minModuleSize30_Module membership.xlsx")
 
 # Merge Annotation & Module membership
 mergedAnnotations <- read_excel("mergedAnnotations.xlsx")
 completeData = merge(moduleLabelsExport, mergedAnnotations, by = "PeaxiGene")
-write.xlsx2(completeData, row.names = FALSE, "WT_Star_Wico_def_minModuleSize1_Final output.xlsx")
+write.xlsx2(completeData, row.names = FALSE, "WT_Star_Wico_def_minModuleSize30_Final output.xlsx")
 
 # Store an .RData image of the working space
-save.image(file = "WT_Star_Wico_def_minModuleSize1.RData")
+save.image(file = "WT_Star_Wico_def_minModuleSize30.RData")
