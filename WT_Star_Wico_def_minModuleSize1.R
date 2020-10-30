@@ -69,8 +69,15 @@ numericLabels = TRUE, pamRespectsDendro = FALSE)
 # See how many modules where identified
 table(net$colors)
 
+# Store valuable data from the TOM
+moduleLabels = net$colors
+geneTree = net$dendrograms
+MEs = net$MEs
+# Convert labels to colors for plotting
+moduleColors = labels2colors(moduleLabels)
+
 # Plot the dendrogram and the module colors underneath
-plotDendroAndColors(geneTree, moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
+plotDendroAndColors(geneTree[[1]], moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
 # Export the same plot in .png
 png("WT_Star_Wico_def_minModuleSize1_Gene Cluster Dendrogram.png", width = 800, height = 600, units = "px")
 plotDendroAndColors(geneTree, moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
@@ -659,7 +666,7 @@ write.xlsx2(moduleLabelsExport, row.names = FALSE, "WT_Star_Wico_def_minModuleSi
 # Merge Annotation & Module membership
 mergedAnnotations <- read_excel("mergedAnnotations.xlsx")
 completeData = merge(moduleLabelsExport, mergedAnnotations, by = "PeaxiGene")
-write.xlsx2(completeData, , row.names = FALSE, "WT_Star_Wico_def_minModuleSize1_Final output.xlsx")
+write.xlsx2(completeData, row.names = FALSE, "WT_Star_Wico_def_minModuleSize1_Final output.xlsx")
 
 # Store an .RData image of the working space
 save.image(file = "WT_Star_Wico_def_minModuleSize1.RData")
