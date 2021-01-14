@@ -38,14 +38,6 @@ gsg = goodSamplesGenes(transposedRawData, minNSamples = 30, verbose = 3)
 gsg$allOK
 cleanData = transposedRawData[gsg$goodSamples, gsg$goodGenes]
 
-# Alternative way to cleanup the data // Much more stringent
-# varianceData > Nb. - Genes which variance is lower will be excluded - To get rid of background noise
-# missingData >= Nb. of samples
-# varianceData = as.vector(apply(as.matrix(transposedRawData), 2, var, na.rm=T))
-# missingData = as.vector(apply(!is.na(as.matrix(transposedRawData)), 2, sum))
-# keepGenes = varianceData>1 & missingData>=30
-# cleanData = transposedRawData[, keepGenes]
-
 # Plot and export (.png) a Cluster Dendrogram showing obvious sample outliers
 sampleTree = hclust(dist(cleanData), method = "average")
 plot(sampleTree)
