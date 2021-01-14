@@ -1,18 +1,17 @@
 ###################################################
 # MAKE SURE YOU WORKING DIRECTORY IS SET PROPERLY #
-#       RNAseq DATA MUST BE IN THIS DIRECTORY     #
-# manualAnnotation DATA MUST BE IN THIS DIRECTORY #
-# mergedAnnotation DATA MUST BE IN THIS DIRECTORY #
+#    ALL DATA FILES MUST BE IN THIS DIRECTORY     #
+#  EXPORTED FILES WILL END UP IN THIS DIRECTORY   #
 ###################################################
 #     SET THOSE UP BEFORE RUNNING THE SCRIPT      #
 ###################################################
-# Set the export-files prefix
+# Exported files prefix (filePrefix_File.extension)
 filePrefix = "publicationDataTer01_gsg_power15_mergeCutHeight030"
-# Set the width and height of .png exports (px)
+# Width and height of .png exports (px)
 imageWidth = 1600
 imageHeight = 1200
 # Set you number of samples, this setting is used to get rid of genes not present in all samples in data preprocessing
-# Manually overwrite it when the gsg function is called if needed
+# Manually overwrite it when the gsg function is called if you want to keep genes with missing values
 sampleNb = 30
 
 # Load mandatory libraries
@@ -76,8 +75,8 @@ plot(sft$fitIndices[,1], sft$fitIndices[,5], xlab="Soft Thresholding Power",
 text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1,col="red")
 dev.off()
 
-# Display the SFTP values to actually chose the one fitting to your dataset
-# Usually chose the first Power that has an SFT.R.sq > 0.90 (abline function in the plot)
+# Display sof thresholding powers (sft) values to chose the power fitting your dataset the best
+# Usually chose the first power that has an SFT.R.sq > 0.90 (abline function in the plot)
 sft
 
 # Plot the Scale Independence : signed R² = f(sft)
@@ -96,14 +95,19 @@ abline(h=0.90, col="red")
 dev.off()
 
 # Construct the gene network and identify modules
-# "maxBlockSize" parameter should be set at the highest your machine can handle considering it's available RAM
+# "maxBlockSize" parameter should be set at the highest your workstation can handle considering it's available RAM
 # A 4GB workstation should handle up to 8000-10000 probes
 # A 8GB workstation should handle up to 12000-14000 probes
 # A 16GB workstation should handle up to 20000-22000 probes
 # A 32GB workstation should handle up to 30000-32000 probes
 # Calculus (256GB workstation in 2020) should handle 62000 probes
-# "power" parameter should be set using Mean Connectivity and Scale Independence plots
-net = blockwiseModules(cleanData, maxBlockSize = 62000, power = 14,
+# "power" parameter should be set using sft table, Mean Connectivity and Scale Independence plots
+# "mergeCutHeight" parameter should be set specifically to your dataset
+# According to Peter Langfelder, 50-100 samples works well with 0.20 to 0.25, for 30 samples I find that 0.30 is fine
+# The bigger mergeCutHeight is the less modules you will obtain, you need to balance it in order to have biologically coherent modules
+# "networkType" is to chose wether you want positively and negatively corelated genes to be grouped in the same modules (unsigned) or not (signed)
+# "minModuleSize" sets how small a module can be
+net = blockwiseModules(cleanData, maxBlockSize = 62000, power = 15,
 networkType = "signed", TOMType = "signed", minModuleSize = 1,
 reassignThreshold = 0, mergeCutHeight = 0.30,
 numericLabels = TRUE, pamRespectsDendro = FALSE)
