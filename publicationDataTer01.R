@@ -1,7 +1,19 @@
 ###################################################
 # MAKE SURE YOU WORKING DIRECTORY IS SET PROPERLY #
 #       RNAseq DATA MUST BE IN THIS DIRECTORY     #
+# manualAnnotation DATA MUST BE IN THIS DIRECTORY #
+# mergedAnnotation DATA MUST BE IN THIS DIRECTORY #
 ###################################################
+#     SET THOSE UP BEFORE RUNNING THE SCRIPT      #
+###################################################
+# Set the export-files prefix
+filePrefix = "publicationDataTer01_gsg_power15_mergeCutHeight030"
+# Set the width and height of .png exports (px)
+imageWidth = 1600
+imageHeight = 1200
+# Set you number of samples, this setting is used to get rid of genes not present in all samples in data preprocessing
+# Manually overwrite it when the gsg function is called if needed
+sampleNb = 30
 
 # Load mandatory libraries
 library(fastcluster)
@@ -10,10 +22,12 @@ library(WGCNA)
 library(xlsx)
 library(readxl)
 
-# The following setting is important, do not omit
+###################################################
+# The following setting is important, do not omit #
+###################################################
 options(stringsAsFactors = FALSE)
 
-# Import RNASeq data
+# Import RNAseq data
 rawData = read.table("publicationData.txt", comment="", header=TRUE)
 dim(rawData)
 
@@ -33,15 +47,13 @@ transposedRawData = as.data.frame(t(rawData))
 dim(transposedRawData)
 
 # Get rid of genes and samples with too many missing values
-# minNSamples = minimal number of samples you want in a gene (here we have 30 samples and we want all genes without all samples present to be discarded)
-gsg = goodSamplesGenes(transposedRawData, minNSamples = 30, verbose = 3)
-gsg$allOK
+gsg = goodSamplesGenes(transposedRawData, minNSamples = sampleNb, verbose = 3)
 cleanData = transposedRawData[gsg$goodSamples, gsg$goodGenes]
 
 # Plot and export (.png) a Cluster Dendrogram showing obvious sample outliers
 sampleTree = hclust(dist(cleanData), method = "average")
 plot(sampleTree)
-png("Samples Cluster Dendrogram.png", width = 1600, height = 1200, units = "px")
+png("Samples Cluster Dendrogram.png", width = imageWidth, height = imageHeight, units = "px")
 plot(sampleTree, main = paste("Samples Cluster Dendrogram"))
 dev.off()
 
@@ -51,13 +63,13 @@ powers = c(c(1:10), seq(from = 10, to=20, by=1))
 sft = pickSoftThreshold(cleanData, powerVector = powers, verbose = 5)
 cex1 = 0.9
 
-# Plot the Mean connectivity as a function of the SFTP
+# Plot the Mean Connectivity = f(sft)
 plot(sft$fitIndices[,1], sft$fitIndices[,5], xlab="Soft Thresholding Power",
      ylab="Mean Connectivity", type="n",
      main = paste("Mean Connectivity"))
 text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1,col="red")
 # Export the same plot in .png
-png("Mean Connectivity.png", width = 1600, height = 1200, units = "px")
+png("Mean Connectivity.png", width = imageWidth, height = imageHeight, units = "px")
 plot(sft$fitIndices[,1], sft$fitIndices[,5], xlab="Soft Thresholding Power",
      ylab="Mean Connectivity", type="n",
      main = paste("Mean Connectivity"))
@@ -67,13 +79,15 @@ dev.off()
 # Display the SFTP values to actually chose the one fitting to your dataset
 # Usually chose the first Power that has an SFT.R.sq > 0.90 (abline function in the plot)
 sft
+
+# Plot the Scale Independence : signed R² = f(sft)
 plot(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2], xlab="Soft Threshold (power)",
      ylab="Scale Free Topology Model Fit, signed R^2",type="n",
      main = paste("Scale Independence"))
 text(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2], labels=powers,cex=cex1,col="red")
 abline(h=0.90, col="red")
 # Export the same plot in .png
-png("Scale Independence.png", width = 1600, height = 1200, units = "px")
+png("Scale Independence.png", width = imageWidth, height = imageHeight, units = "px")
 plot(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2], xlab="Soft Threshold (power)",
      ylab="Scale Free Topology Model Fit, signed R^2",type="n",
      main = paste("Scale Independence"))
@@ -81,17 +95,14 @@ text(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2], labels=po
 abline(h=0.90, col="red")
 dev.off()
 
-# Set your files suffix
-fileSuffix = "publicationDataTer01_gsg_power15_mergeCutHeight030"
-
 # Construct the gene network and identify modules
 # "maxBlockSize" parameter should be set at the highest your machine can handle considering it's available RAM
 # A 4GB workstation should handle up to 8000-10000 probes
 # A 8GB workstation should handle up to 12000-14000 probes
 # A 16GB workstation should handle up to 20000-22000 probes
 # A 32GB workstation should handle up to 30000-32000 probes
-# Calculus (256GB WS in 2020) should handle 62000 probes
-# "power" parameter should be set using the Mean connectivity plot
+# Calculus (256GB workstation in 2020) should handle 62000 probes
+# "power" parameter should be set using Mean Connectivity and Scale Independence plots
 net = blockwiseModules(cleanData, maxBlockSize = 62000, power = 14,
 networkType = "signed", TOMType = "signed", minModuleSize = 1,
 reassignThreshold = 0, mergeCutHeight = 0.30,
@@ -110,7 +121,7 @@ moduleColors = labels2colors(moduleLabels)
 # Plot the dendrogram and the module colors underneath
 plotDendroAndColors(geneTree[[1]], moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
 # Export the same plot in .png
-png(file = sprintf("%s_Genes Cluster Dendrogram.png", fileSuffix), width = 1600, height = 1200, units = "px")
+png(file = sprintf("%s_Genes Cluster Dendrogram.png", filePrefix), width = imageWidth, height = imageHeight, units = "px")
 plotDendroAndColors(geneTree[[1]], moduleColors[net$blockGenes[[1]]], "Module colors", dendroLabels = FALSE, hang = 0.03, addGuide = TRUE, guideHang = 0.05)
 dev.off()
 
@@ -122,13 +133,13 @@ hclustdatME=hclust(as.dist(dissimME), method="average" )
 par(mfrow=c(1,1))
 plot(hclustdatME, main="Module Eigengenes Clustering Tree")
 # Export the same plot in .png
-png(file = sprintf("%s_Module Eigengenes Clustering Tree.png", fileSuffix), width = 1600, height = 1200, units = "px")
+png(file = sprintf("%s_Module Eigengenes Clustering Tree.png", filePrefix), width = imageWidth, height = imageHeight, units = "px")
 plot(hclustdatME, main="Module Eigengenes Clustering Tree")
 dev.off()
 
 # Plot for each module the gene expression levels and the eigengen expression levels in the different samples (red > green)
 # Store the plots in a .pdf file
-pdf(file = sprintf("%s_Genes and Eigengenes expression levels.pdf", fileSuffix))
+pdf(file = sprintf("%s_Genes and Eigengenes expression levels.pdf", filePrefix))
 which.module="0"
 ME=datME[, paste("ME",which.module, sep="")]
 par(mfrow=c(2,1), mar=c(0.3, 5.5, 7, 2))
@@ -455,23 +466,23 @@ dev.off()
 # Store and export the Eigengenes expression levels per Modules
 tMEs = t(MEs)
 MEsExport = as.data.frame(tMEs)
-write.xlsx2(MEsExport, file = sprintf("%s_Eigengene expression level.xlsx", fileSuffix))
+write.xlsx2(MEsExport, file = sprintf("%s_Eigengene expression level.xlsx", filePrefix))
 # Store and export the Modules Labels
 moduleLabelsExport = as.data.frame(moduleLabels)
 moduleLabelsExport = cbind(rownames(moduleLabelsExport), data.frame(moduleLabels, row.names = NULL))
 names(moduleLabelsExport)[1] = "PeaxiGene"
 names(moduleLabelsExport)[2] = "Module"
-write.xlsx2(moduleLabelsExport, row.names = FALSE, file = sprintf("%s_Module membership.xlsx", fileSuffix))
+write.xlsx2(moduleLabelsExport, row.names = FALSE, file = sprintf("%s_Module membership.xlsx", filePrefix))
 
 # Merge mergedAnnotation & Module membership
 mergedAnnotation = read_xlsx("mergedAnnotation.xlsx")
 mergedData1 = merge(moduleLabelsExport, mergedAnnotation, by = "PeaxiGene")
-write.xlsx2(mergedData1, row.names = FALSE, file = sprintf("%s_mergedAnnotation Output.xlsx", fileSuffix))
+write.xlsx2(mergedData1, row.names = FALSE, file = sprintf("%s_mergedAnnotation Output.xlsx", filePrefix))
 
 # Merge manualAnnotation & Module membership
 manualAnnotation = read_xlsx("manualAnnotation.xlsx")
 mergedData2 = merge(moduleLabelsExport, manualAnnotation, by = "PeaxiGene")
-write.xlsx2(mergedData2, row.names = FALSE, file = sprintf("%s_manualAnnotation Output.xlsx", fileSuffix))
+write.xlsx2(mergedData2, row.names = FALSE, file = sprintf("%s_manualAnnotation Output.xlsx", filePrefix))
 
 # Store an .RData image of the working space
-save.image(file = sprintf("%s_Image.RData", fileSuffix))
+save.image(file = sprintf("%s_Image.RData", filePrefix))
