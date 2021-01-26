@@ -41,6 +41,9 @@ rawData = rawData[grep(pattern = "Stg1_Bud", colnames(rawData), invert = TRUE)]
 rawData = rawData[grep(pattern = "Stg3_Bud", colnames(rawData), invert = TRUE)]
 rawData = rawData[grep(pattern = "Veg.Mrstm", colnames(rawData), invert = TRUE)]
 
+# Get rid of rows containing columns with 0 reads
+rawData = rawData[apply(rawData, 1, function(row) all(row != 0)),]
+
 # Transpose the data (invert rows and columns)
 transposedRawData = as.data.frame(t(rawData))
 dim(transposedRawData)
