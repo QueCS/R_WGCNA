@@ -178,6 +178,7 @@ gc()
 write.xlsx2(mergedAnnotationCluster10Markers, file = sprintf("%s_Cluster markers.xlsx", filePrefix), sheetName = "mrgC.10", append = TRUE)
 gc()
 write.xlsx2(mergedAnnotationCluster11Markers, file = sprintf("%s_Cluster markers.xlsx", filePrefix), sheetName = "mrgC.11", append = TRUE)
+gc()
 # manualAnnotation
 write.xlsx2(manualAnnotationCluster1Markers, file = sprintf("%s_Cluster markers.xlsx", filePrefix), sheetName = "manC.1", append = TRUE)
 gc()
