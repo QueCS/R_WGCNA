@@ -203,5 +203,30 @@ gc()
 write.xlsx2(manualAnnotationCluster11Markers, file = sprintf("%s_Cluster markers.xlsx", filePrefix), sheetName = "manC.11", append = TRUE)
 gc()
 
+# Find all markers of each cluster
+data11Markers = FindAllMarkers(data11, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+# Find the top 10 markers of each cluster
+top10 = data11Markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC)
+# Generate an expression heatmap of the top 10 markers of each cluster
+top10HeatMap = DoHeatmap(data11, features = top10$gene) + NoLegend()
+top10HeatMap
+# Export
+png(file = sprintf("%s_Top 10 markers Heatmap.png", filePrefix), width = 4000, height = 3000, units = "px")
+top10HeatMap
+dev.off()
+# Generate a dataframe of the top 10 markers of each cluster
+top10df = as.data.frame(top10)
+names(top10df)[7] = "PeaxiGene"
+# Add annotation data to the dataframe
+mergedAnnotationTop10Markers = merge(top10df, mergedAnnotation, by = "PeaxiGene")
+manualAnnotationTop10Markers = merge(top10df, manualAnnotation, by = "PeaxiGene")
+# Export
+# mergedAnnotation
+write.xlsx2(mergedAnnotationTop10Markers, file = sprintf("%s_Top 10 markers.xlsx", filePrefix), sheetName = "mergedAnnotation")
+gc()
+# manualAnnotation
+write.xlsx2(manualAnnotationTop10Markers, file = sprintf("%s_Top 10 markers.xlsx", filePrefix), sheetName = "manualAnnotation", append = TRUE)
+gc()
+
 # Store an .RData image of the working space
 save.image(file = sprintf("%s_Image.RData", filePrefix))
