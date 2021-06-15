@@ -33,7 +33,7 @@ dev.off()
 # Visualize Count-Feature relationships
 countFeaturePlot = FeatureScatter(data, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
 countFeaturePlot
-#Export
+# Export
 png(file = sprintf("%s_Count-Feature.png", projectName), width = imageWidth, height = imageHeight, units = "px")
 countFeaturePlot
 dev.off()
