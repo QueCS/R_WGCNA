@@ -204,7 +204,7 @@ manualAnnotationCluster10Markers = merge(cluster10Markers, manualAnnotation, by 
 write.xlsx2(mergedAnnotationCluster0Markers, file = sprintf("%s_Cluster markers.xlsx", projectName), sheetName = "mrgC.0")
 write.xlsx2(manualAnnotationCluster0Markers, file = sprintf("%s_Cluster markers.xlsx", projectName), sheetName = "manC.0", append = TRUE)
 gc()
-write.xlsx2(mergedAnnotationCluster1Markers, file = sprintf("%s_Cluster markers.xlsx", projectName), sheetName = "mrgC.1")
+write.xlsx2(mergedAnnotationCluster1Markers, file = sprintf("%s_Cluster markers.xlsx", projectName), sheetName = "mrgC.1", append = TRUE)
 write.xlsx2(manualAnnotationCluster1Markers, file = sprintf("%s_Cluster markers.xlsx", projectName), sheetName = "manC.1", append = TRUE)
 gc()
 write.xlsx2(mergedAnnotationCluster2Markers, file = sprintf("%s_Cluster markers.xlsx", projectName), sheetName = "mrgC.2", append = TRUE)
