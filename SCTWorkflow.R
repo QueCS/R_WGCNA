@@ -354,3 +354,6 @@ VlnPlot(clstData, features =  c("Peaxi162Scf00338g00912", "Peaxi162Scf00118g0031
 FeaturePlot(clstData, features =  c("Peaxi162Scf00378g00113", "Peaxi162Scf00518g00430", "Peaxi162Scf00089g00427", "Peaxi162Scf00316g00055", "Peaxi162Scf00713g00038"), label = TRUE) + NoLegend()
 VlnPlot(clstData, features =  c("Peaxi162Scf00378g00113", "Peaxi162Scf00518g00430", "Peaxi162Scf00089g00427", "Peaxi162Scf00316g00055", "Peaxi162Scf00713g00038")) + NoLegend()
 dev.off()
+
+# Store an .RData image of the working space
+save.image(file = sprintf("%s_Image.RData", projectName))
