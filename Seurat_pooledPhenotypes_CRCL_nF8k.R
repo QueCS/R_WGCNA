@@ -265,26 +265,26 @@ gc()
 # Find all markers of each cluster
 dataMarkers = FindAllMarkers(data, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
 # Find the top 10 markers of each cluster
-top10 = dataMarkers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC)
+top12 = dataMarkers %>% group_by(cluster) %>% top_n(n = 12, wt = avg_log2FC)
 # Generate an expression heatmap of the top 10 markers of each cluster
-top10HeatMap = DoHeatmap(data, features = top10$gene) + NoLegend()
-top10HeatMap
+top12HeatMap = DoHeatmap(data, features = top12$gene) + NoLegend()
+top12HeatMap
 # Export
-png(file = sprintf("%s_Top 10 markers Heatmap.png", projectName), width = 4000, height = 3000, units = "px")
-top10HeatMap
+png(file = sprintf("%s_Top 12 markers Heatmap.png", projectName), width = 4000, height = 3000, units = "px")
+top12HeatMap
 dev.off()
 # Generate a dataframe of the top 10 markers of each cluster
-top10df = as.data.frame(top10)
-names(top10df)[7] = "PeaxiGene"
+top12df = as.data.frame(top10)
+names(top12df)[7] = "PeaxiGene"
 # Add annotation data to the dataframe
-mergedAnnotationTop10Markers = merge(top10df, mergedAnnotation, by = "PeaxiGene")
-manualAnnotationTop10Markers = merge(top10df, manualAnnotation, by = "PeaxiGene")
+mergedAnnotationTop12Markers = merge(top12df, mergedAnnotation, by = "PeaxiGene")
+manualAnnotationTop12Markers = merge(top12df, manualAnnotation, by = "PeaxiGene")
 # Export
 # mergedAnnotation
-write.xlsx2(mergedAnnotationTop10Markers, file = sprintf("%s_Top 10 markers.xlsx", projectName), sheetName = "mergedAnnotation")
+write.xlsx2(mergedAnnotationTop12Markers, file = sprintf("%s_Top 10 markers.xlsx", projectName), sheetName = "mergedAnnotation")
 gc()
 # manualAnnotation
-write.xlsx2(manualAnnotationTop10Markers, file = sprintf("%s_Top 10 markers.xlsx", projectName), sheetName = "manualAnnotation", append = TRUE)
+write.xlsx2(manualAnnotationTop12Markers, file = sprintf("%s_Top 10 markers.xlsx", projectName), sheetName = "manualAnnotation", append = TRUE)
 gc()
 
 # Store an .RData image of the working space
