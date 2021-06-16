@@ -89,7 +89,7 @@ dev.off()
 data = FindNeighbors(data, dims = 1:20)
 data = FindClusters(data, resolution = 0.5)
 data = RunUMAP(data, dims = 1:20)
-clusterPlot = DimPlot(data, reduction = "umap")
+clusterPlot = DimPlot(data, reduction = "umap", label = TRUE)
 clusterPlot
 png(file = sprintf("%s_Clusters.png", projectName), width = imageWidth, height = imageHeight, units = "px")
 clusterPlot
@@ -266,26 +266,94 @@ gc()
 dataMarkers = FindAllMarkers(data, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
 # Find the top 10 markers of each cluster
 top12 = dataMarkers %>% group_by(cluster) %>% top_n(n = 12, wt = avg_log2FC)
+names(top12)[7] = "PeaxiGene"
 # Generate an expression heatmap of the top 10 markers of each cluster
-top12HeatMap = DoHeatmap(data, features = top12$gene) + NoLegend()
+top12HeatMap = DoHeatmap(data, features = top12$PeaxiGene) + NoLegend()
 top12HeatMap
 # Export
 png(file = sprintf("%s_Top 12 markers Heatmap.png", projectName), width = 4000, height = 3000, units = "px")
 top12HeatMap
 dev.off()
-# Generate a dataframe of the top 10 markers of each cluster
-top12df = as.data.frame(top10)
-names(top12df)[7] = "PeaxiGene"
+
 # Add annotation data to the dataframe
-mergedAnnotationTop12Markers = merge(top12df, mergedAnnotation, by = "PeaxiGene")
-manualAnnotationTop12Markers = merge(top12df, manualAnnotation, by = "PeaxiGene")
+mergedAnnotationTop12Markers = merge(top12, mergedAnnotation, by = "PeaxiGene")
+manualAnnotationTop12Markers = merge(top12, manualAnnotation, by = "PeaxiGene")
 # Export
 # mergedAnnotation
-write.xlsx2(mergedAnnotationTop12Markers, file = sprintf("%s_Top 10 markers.xlsx", projectName), sheetName = "mergedAnnotation")
+write.xlsx2(mergedAnnotationTop12Markers, file = sprintf("%s_Top 12 markers.xlsx", projectName), sheetName = "mergedAnnotation")
 gc()
 # manualAnnotation
-write.xlsx2(manualAnnotationTop12Markers, file = sprintf("%s_Top 10 markers.xlsx", projectName), sheetName = "manualAnnotation", append = TRUE)
+write.xlsx2(manualAnnotationTop12Markers, file = sprintf("%s_Top 12 markers.xlsx", projectName), sheetName = "manualAnnotation", append = TRUE)
 gc()
+
+# Keep the top 12 markers for each cluster
+cluster0Top12Markers = top12[1:12,]
+cluster1Top12Markers = top12[13:24,]
+cluster2Top12Markers = top12[25:36,]
+cluster3Top12Markers = top12[37:48,]
+cluster4Top12Markers = top12[49:60,]
+cluster5Top12Markers = top12[61:72,]
+cluster6Top12Markers = top12[73:84,]
+cluster7Top12Markers = top12[85:96,]
+cluster8Top12Markers = top12[97:108,]
+cluster9Top12Markers = top12[109:120,]
+cluster10Top12Markers = top12[121:132,]
+# cluster11Top12Markers = top12[133:144,]
+# cluster12Top12Markers = top12[145:156,]
+# cluster13Top12Markers = top12[157:168,]
+# cluster14Top12Markers = top12[169:180,]
+# cluster15Top12Markers = top12[181:192,]
+# cluster16Top12Markers = top12[193:210,]
+# cluster17Top12Markers = top12[211:222,]
+# cluster18Top12Markers = top12[223:234,]
+# cluster19Top12Markers = top12[235:246,]
+# cluster20Top12Markers = top12[247:258,]
+
+# .pdf export of Feature & Violin Plots
+pdf(file = sprintf("%s_Top 12 Markers.pdf", projectName), width = 14.8, height = 11.1)
+FeaturePlot(data, features =  cluster0Top12Markers$PeaxiGene, label = TRUE)
+VlnPlot(data, features =  cluster0Top12Markers$PeaxiGene)
+FeaturePlot(data, features =  cluster1Top12Markers$PeaxiGene, label = TRUE)
+VlnPlot(data, features =  cluster1Top12Markers$PeaxiGene)
+FeaturePlot(data, features =  cluster2Top12Markers$PeaxiGene, label = TRUE)
+VlnPlot(data, features =  cluster2Top12Markers$PeaxiGene)
+FeaturePlot(data, features =  cluster3Top12Markers$PeaxiGene, label = TRUE)
+VlnPlot(data, features =  cluster3Top12Markers$PeaxiGene)
+FeaturePlot(data, features =  cluster4Top12Markers$PeaxiGene, label = TRUE)
+VlnPlot(data, features =  cluster4Top12Markers$PeaxiGene)
+FeaturePlot(data, features =  cluster5Top12Markers$PeaxiGene, label = TRUE)
+VlnPlot(data, features =  cluster5Top12Markers$PeaxiGene)
+FeaturePlot(data, features =  cluster6Top12Markers$PeaxiGene, label = TRUE)
+VlnPlot(data, features =  cluster6Top12Markers$PeaxiGene)
+FeaturePlot(data, features =  cluster7Top12Markers$PeaxiGene, label = TRUE)
+VlnPlot(data, features =  cluster7Top12Markers$PeaxiGene)
+FeaturePlot(data, features =  cluster8Top12Markers$PeaxiGene, label = TRUE)
+VlnPlot(data, features =  cluster8Top12Markers$PeaxiGene)
+FeaturePlot(data, features =  cluster9Top12Markers$PeaxiGene, label = TRUE)
+VlnPlot(data, features =  cluster9Top12Markers$PeaxiGene)
+FeaturePlot(data, features =  cluster10Top12Markers$PeaxiGene, label = TRUE)
+VlnPlot(data, features =  cluster10Top12Markers$PeaxiGene)
+# FeaturePlot(data, features =  cluster11Top12Markers$PeaxiGene, label = TRUE)
+# VlnPlot(data, features =  cluster11Top12Markers$PeaxiGene)
+# FeaturePlot(data, features =  cluster12Top12Markers$PeaxiGene, label = TRUE)
+# VlnPlot(data, features =  cluster12Top12Markers$PeaxiGene)
+# FeaturePlot(data, features =  cluster13Top12Markers$PeaxiGene, label = TRUE)
+# VlnPlot(data, features =  cluster13Top12Markers$PeaxiGene)
+# FeaturePlot(data, features =  cluster14Top12Markers$PeaxiGene, label = TRUE)
+# VlnPlot(data, features =  cluster14Top12Markers$PeaxiGene)
+# FeaturePlot(data, features =  cluster15Top12Markers$PeaxiGene, label = TRUE)
+# VlnPlot(data, features =  cluster15Top12Markers$PeaxiGene)
+# FeaturePlot(data, features =  cluster16Top12Markers$PeaxiGene, label = TRUE)
+# VlnPlot(data, features =  cluster16Top12Markers$PeaxiGene)
+# FeaturePlot(data, features =  cluster17Top12Markers$PeaxiGene, label = TRUE)
+# VlnPlot(data, features =  cluster17Top12Markers$PeaxiGene)
+# FeaturePlot(data, features =  cluster18Top12Markers$PeaxiGene, label = TRUE)
+# VlnPlot(data, features =  cluster18Top12Markers$PeaxiGene)
+# FeaturePlot(data, features =  cluster19Top12Markers$PeaxiGene, label = TRUE)
+# VlnPlot(data, features =  cluster19Top12Markers$PeaxiGene)
+# FeaturePlot(data, features =  cluster20Top12Markers$PeaxiGene, label = TRUE)
+# VlnPlot(data, features =  cluster20Top12Markers$PeaxiGene)
+dev.off()
 
 # Store an .RData image of the working space
 save.image(file = sprintf("%s_Image.RData", projectName))
