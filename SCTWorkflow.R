@@ -233,6 +233,16 @@ cluster16Top12Markers = top12[193:210,]
 # cluster19Top12Markers = top12[235:246,]
 # cluster20Top12Markers = top12[247:258,]
 
+# Add annotation data to top 12 markers
+mergedAnnotationTop12Markers = merge(top12, mergedAnnotation, by = "PeaxiGene")
+manualAnnotationTop12Markers = merge(top12, manualAnnotation, by = "PeaxiGene")
+# Export
+# mergedAnnotation
+write.xlsx2(mergedAnnotationTop12Markers, file = sprintf("%s_Top 12 markers.xlsx", projectName), row.names = FALSE, sheetName = "mergedAnnotation")
+# manualAnnotation
+write.xlsx2(manualAnnotationTop12Markers, file = sprintf("%s_Top 12 markers.xlsx", projectName), row.names = FALSE, sheetName = "manualAnnotation", append = TRUE)
+gc()
+
 # .pdf export of Feature & Violin Plots
 pdf(file = sprintf("%s_Top 12 Markers.pdf", projectName), width = 14.8, height = 11.1)
 FeaturePlot(clstData, features =  cluster0Top12Markers$PeaxiGene, label = TRUE)
