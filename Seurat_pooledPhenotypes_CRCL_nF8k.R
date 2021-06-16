@@ -1,5 +1,5 @@
 # Choose a project name
-projectName = "pooledPhenotypes_CRCL_nF8k_V2"
+projectName = "pooledPhenotypes_CRCL_nF8k_V3"
 # Width and height of .png exports (px)
 imageWidth = 800
 imageHeight = 600
