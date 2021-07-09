@@ -12,6 +12,7 @@ library(limma)
 library(xlsx)
 library(readxl)
 library(glmGamPoi)
+library(hdf5r)
 
 # Import annotation data
 mergedAnnotation = read_xlsx("/projects/petunia/scRNASeq/annotation/mergedAnnotation.xlsx")
