@@ -4,6 +4,9 @@ projectName = "pooledPhenotypes_CRCL_SCT_002"
 imageWidth = 800
 imageHeight = 600
 
+# Setting workingDirectroy
+setwd("~/documents/scRNASeq/workingDirectory")
+
 # Load libraries
 library(dplyr)
 library(Seurat)
@@ -367,4 +370,4 @@ VlnPlot(clstData, features =  c("Peaxi162Scf00378g00113", "Peaxi162Scf00518g0043
 dev.off()
 
 # Store an .RData image of the working space
-save.image(file = sprintf("%s_Image.RData", projectName))
+# save.image(file = sprintf("%s_Image.RData", projectName))
